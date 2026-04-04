@@ -1,0 +1,6 @@
+.DS_Store
+log/*.log
+log/*.ico
+src/server.log
+src/.DS_Store
+src/assets/.DS_Store
