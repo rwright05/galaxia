@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/x-icon" href="br_logo.ico">
+  <link rel="icon" type="image/x-icon" href="assets/br_logo.ico">
   <meta charset="UTF-8">
   <title>BR Galaxia</title>
   <link rel="stylesheet" href="style.css">
@@ -56,6 +56,12 @@
     <!-- Firework effect canvas -->
     <canvas id="firework-canvas"></canvas>
     <button id="restart-button-victory">Play Again</button>
+  </div>
+
+  <!-- Dynamic modal overlay used by showModal() in main.js -->
+  <div id="modal-overlay" class="overlay">
+    <p id="modal-message"></p>
+    <button id="modal-button"></button>
   </div>
 
   <script src="main.js"></script>
