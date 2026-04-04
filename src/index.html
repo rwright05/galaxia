@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/x-icon" href="br_logo.ico">
+  <meta charset="UTF-8">
+  <title>BR Galaxia</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Game Title (outside game box, top left) -->
+  <div id="game-title-outside">BR Galaxia</div>
+  <!-- Score (outside game box, top right) -->
+  <div id="score-outside">Score: 0</div>
+  <!-- Lives (displayed below the score) -->
+  <div id="lives-outside">Lives: 3</div>
+
+  <!-- Game container box (fixed size 800×600) -->
+  <div id="game-container">
+    <canvas id="game-canvas"></canvas>
+  </div>
+
+  <!-- Control Info (outside game box, bottom right) -->
+  <div id="controls-outside">
+    <div id="keyboard-controls">
+      <p>Use Arrow keys or touch buttons to move, Space/shoot button to fire</p>
+    </div>
+    <div id="touch-controls">
+      <button id="btn-left">Left</button>
+      <button id="btn-right">Right</button>
+      <button id="btn-shoot">Shoot</button>
+      <button id="btn-pause">Pause</button>
+    </div>
+  </div>
+
+  <!-- Overlays for Start, Pause, End, and Victory Screens -->
+  <div id="start-screen" class="overlay">
+    <h1>BR Galaxia</h1>
+    <p>Press Start to Begin</p>
+    <button id="start-button">Start Game</button>
+  </div>
+
+  <div id="pause-screen" class="overlay">
+    <h1>Game Paused</h1>
+    <p>Press Resume to continue</p>
+    <button id="resume-button">Resume</button>
+  </div>
+
+  <div id="end-screen" class="overlay">
+    <h1>Game Over</h1>
+    <p id="end-message"></p>
+    <button id="restart-button">Restart Game</button>
+  </div>
+
+  <div id="victory-screen" class="overlay">
+    <h1>Victory!</h1>
+    <!-- Firework effect canvas -->
+    <canvas id="firework-canvas"></canvas>
+    <button id="restart-button-victory">Play Again</button>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

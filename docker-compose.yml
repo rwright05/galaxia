@@ -1,0 +1,15 @@
+services:
+  galaxia:
+    build: .
+    ports:
+      - "100.108.31.115:5023:80"
+    volumes:
+      - ./log:/var/log/galaxia
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
