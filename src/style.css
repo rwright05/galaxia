@@ -35,6 +35,15 @@ html, body {
   z-index: 100;
 }
 
+#level-outside {
+  position: absolute;
+  top: 90px;
+  right: 10px;
+  color: #fff;
+  font-size: 24px;
+  z-index: 100;
+}
+
 /* Game container box */
 #game-container {
   position: absolute;
