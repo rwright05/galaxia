@@ -16,10 +16,15 @@ BR Galaxia is a classic arcade-inspired game built with HTML5 Canvas, Docker, an
 
 - **Gameplay Mechanics:**
   - **Enemies:** Arranged in 4 rows using unique enemy images. They bounce off the left/right boundaries and move downward.
-  - **Levels:** There are 10 levels. Each level increases enemy speed by 5%. On level 10, a boss (30% larger than the main ship) appears.
+  - **Levels:** There are 10 levels. Each level increases enemy speed by 8%. On level 10, a boss (30% larger than the main ship) appears.
   - **Bullets:** The ship fires bullets that can hit enemies or the boss.
   - **Extra Lives:** Extra lives are awarded each time a defined score threshold is reached.
   - **Overlays:** Start Menu, Pause screen, Game Over screen, and Victory screen (with a firework effect).
+
+- **Scoreboard:**
+  - Top 10 high scores stored in `localStorage` — persists across sessions.
+  - After game over or victory, a name entry prompt appears before the score is saved.
+  - High scores table is shown on the start screen and after each game ends.
   
 - **Sound Effects:**  
   The game integrates several sound effects inspired by Galaga. Place the following sound files in `src/assets/sounds/`:
@@ -59,6 +64,10 @@ Game accessible at `http://100.108.31.115:5023` (Tailscale only).
 ---
 
 ## Changelog
+
+### 2026-04-04 (2)
+- **Feature:** Scoreboard system — top 10 scores saved to `localStorage` with name entry after game over/victory; scores displayed on start screen and post-game modals
+- **Improvement:** Enemy speed scaling increased from 5% to 8% per level (`Math.pow(1.08, level - 1)`); boss speed updated to match
 
 ### 2026-04-04
 - **Fix (critical):** Added `include /etc/nginx/mime.types` to `nginx.conf` — JS/CSS/MP3/PNG were being served as `application/octet-stream`, preventing the game from loading
