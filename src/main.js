@@ -33,19 +33,77 @@
     const levelDisplay = document.getElementById("level-outside");
 
     // ------------------------------
+    // SCOREBOARD (localStorage)
+    // ------------------------------
+    function getScores() {
+      try {
+        return JSON.parse(localStorage.getItem("galaxia_scores") || "[]");
+      } catch(e) {
+        return [];
+      }
+    }
+
+    function saveScore(name, finalScore, finalLevel) {
+      let scores = getScores();
+      scores.push({ name: (name.trim() || "Player"), score: finalScore, level: finalLevel });
+      scores.sort(function(a, b) { return b.score - a.score; });
+      localStorage.setItem("galaxia_scores", JSON.stringify(scores.slice(0, 10)));
+    }
+
+    function renderScoreboard() {
+      const tbody = document.getElementById("scoreboard-body");
+      const scores = getScores();
+      tbody.innerHTML = "";
+      if (scores.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center">No scores yet</td></tr>';
+        return;
+      }
+      scores.forEach(function(entry, i) {
+        let tr = document.createElement("tr");
+        if (i === 0) tr.className = "top-score";
+        tr.innerHTML = "<td>" + (i + 1) + "</td><td>" + entry.name + "</td><td>" + entry.score + "</td><td>" + entry.level + "</td>";
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ------------------------------
     // MODAL FUNCTIONS (pop-up within game box)
     // ------------------------------
-    function showModal(message, buttonText, callback) {
+    function showModal(message, buttonText, callback, showScores) {
       const modalOverlay = document.getElementById("modal-overlay");
       const modalMessage = document.getElementById("modal-message");
       const modalButton = document.getElementById("modal-button");
+      const modalScoreboard = document.getElementById("modal-scoreboard");
       modalMessage.textContent = message;
       modalButton.textContent = buttonText;
+      if (showScores) {
+        renderScoreboard();
+        modalScoreboard.style.display = "block";
+      } else {
+        modalScoreboard.style.display = "none";
+      }
       modalOverlay.style.display = "flex";
       modalButton.onclick = function() {
         modalOverlay.style.display = "none";
         if (callback) callback();
       };
+    }
+
+    function showNameEntry(title, finalScore, finalLevel, callback) {
+      const overlay = document.getElementById("name-entry-overlay");
+      document.getElementById("name-entry-title").textContent = title;
+      document.getElementById("name-entry-score").textContent = "Score: " + finalScore + "  |  Level: " + finalLevel;
+      const input = document.getElementById("name-input");
+      input.value = "";
+      overlay.style.display = "flex";
+      function submit() {
+        overlay.style.display = "none";
+        saveScore(input.value, finalScore, finalLevel);
+        callback();
+      }
+      document.getElementById("name-submit-button").onclick = submit;
+      input.onkeydown = function(e) { if (e.key === "Enter") submit(); };
+      setTimeout(function() { input.focus(); }, 50);
     }
 
     // ------------------------------
@@ -155,7 +213,7 @@
             y: yPos,
             width: ENEMY_WIDTH,
             height: ENEMY_HEIGHT,
-            speed: baseSpeed * Math.pow(1.05, level - 1), // 5% increase per level
+            speed: baseSpeed * Math.pow(1.08, level - 1), // 8% increase per level
             direction: 1,
             type: fileName
           };
@@ -169,7 +227,7 @@
 
     // Create boss (level 10 only)
     function createBoss() {
-      let bossSpeed = 2 * Math.pow(1.05, 5);
+      let bossSpeed = 2 * Math.pow(1.08, 5);
       boss = {
         image: bossImage,
         x: (GAME_WIDTH - SHIP_WIDTH * BOSS_SCALE) / 2,
@@ -338,7 +396,9 @@
               scoreDisplay.textContent = "Score: " + score;
               boss = null;
               gameState = "victory";
-              showModal("Victory!", "Play Again", startGame);
+              showNameEntry("Victory!", score, level, function() {
+                showModal("Victory! — Final Score: " + score, "Play Again", startGame, true);
+              });
             }
             break;
           }
@@ -361,7 +421,9 @@
           }
           if (ship.lives <= 0) {
             gameState = "gameover";
-            showModal("Game Over\nFinal Score: " + score, "Restart", startGame);
+            showNameEntry("Game Over", score, level, function() {
+              showModal("Game Over — Final Score: " + score, "Restart", startGame, true);
+            });
           }
         }
       }
@@ -490,6 +552,6 @@
       e.preventDefault();
     });
 
-    // Show start modal to begin game
-    showModal("Press Start to Begin", "Start Game", startGame);
+    // Show start modal with scoreboard
+    showModal("Press Start to Begin", "Start Game", startGame, true);
   });

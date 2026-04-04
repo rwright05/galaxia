@@ -63,7 +63,22 @@
   <!-- Dynamic modal overlay used by showModal() in main.js -->
   <div id="modal-overlay" class="overlay">
     <p id="modal-message"></p>
+    <div id="modal-scoreboard">
+      <h2>High Scores</h2>
+      <table id="scoreboard-table">
+        <thead><tr><th>#</th><th>Name</th><th>Score</th><th>Level</th></tr></thead>
+        <tbody id="scoreboard-body"></tbody>
+      </table>
+    </div>
     <button id="modal-button"></button>
+  </div>
+
+  <!-- Name entry overlay shown before saving a score -->
+  <div id="name-entry-overlay" class="overlay">
+    <h2 id="name-entry-title"></h2>
+    <p id="name-entry-score"></p>
+    <input id="name-input" type="text" maxlength="12" placeholder="Enter your name" autocomplete="off">
+    <button id="name-submit-button">Submit Score</button>
   </div>
 
   <script src="main.js"></script>
