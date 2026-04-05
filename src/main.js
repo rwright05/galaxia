@@ -1,7 +1,6 @@
   document.addEventListener("DOMContentLoaded", function() {
     // Prevent any page scrolling
     document.body.style.overflow = "hidden";
-    console.log("Game script loaded. DOMContentLoaded fired.");
 
     // ------------------------------
     // GAME STATE VARIABLES & UI ELEMENTS
@@ -14,6 +13,7 @@
     let lives = 3;
     let shipHitCount = 0; // Ship takes 3 hits before losing a life
     let shipDamageFlash = 0; // Frames remaining for red damage flash
+    let lastShotTime = 0; // Timestamp of last bullet fired (cooldown)
 
     // Keys tracking
     let keys = {};
@@ -264,6 +264,10 @@
     // GAME MECHANICS
     // ------------------------------
     function shootBullet() {
+      if (gameState !== "playing") return;
+      const now = Date.now();
+      if (now - lastShotTime < 200) return; // 200ms cooldown — prevents bullet spam
+      lastShotTime = now;
       let bullet = {
         x: ship.x + ship.width / 2 - BULLET_WIDTH / 2,
         y: ship.y,
@@ -396,6 +400,7 @@
               scoreDisplay.textContent = "Score: " + score;
               boss = null;
               gameState = "victory";
+              startFireworks();
               showNameEntry("Victory!", score, level, function() {
                 showModal("Victory! — Final Score: " + score, "Play Again", startGame, true);
               });
@@ -424,6 +429,7 @@
             showNameEntry("Game Over", score, level, function() {
               showModal("Game Over — Final Score: " + score, "Restart", startGame, true);
             });
+            break; // stop processing further enemy bullets this frame
           }
         }
       }
@@ -433,6 +439,8 @@
         if (level < MAX_LEVEL) {
           level++;
           levelDisplay.textContent = "Level: " + level;
+          bullets = [];        // clear stale player bullets between levels
+          enemyBullets = [];   // clear stale enemy bullets between levels
           createEnemies();
           if (level === MAX_LEVEL) {
             createBoss();
@@ -494,6 +502,7 @@
       levelDisplay.textContent = "Level: " + level;
       createEnemies();
       boss = null;
+      bullets = [];
       enemyBullets = [];
       gameState = "playing";
       sounds.startGame.currentTime = 0;
@@ -518,7 +527,7 @@
       keys[e.key] = true;
       if (e.code === "Space") {
         e.preventDefault();
-        shootBullet();
+        if (gameState === "playing") shootBullet();
       }
       if (e.key === "p" || e.key === "P") {
         pauseGame();
