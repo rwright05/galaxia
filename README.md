@@ -16,10 +16,10 @@ BR Galaxia is a classic arcade-inspired game built with HTML5 Canvas, Docker, an
 
 - **Gameplay Mechanics:**
   - **Enemies:** Arranged in 4 rows using unique enemy images. They bounce off the left/right boundaries and move downward.
-  - **Levels:** There are 10 levels. Each level increases enemy speed by 8%. On level 10, a boss (30% larger than the main ship) appears.
-  - **Bullets:** The ship fires bullets that can hit enemies or the boss.
+  - **Levels:** There are 10 levels. Each level increases enemy speed by 8%. On level 10, a boss (30% larger than the main ship) appears alongside remaining enemies.
+  - **Bullets:** 200ms cooldown between shots — prevents spam. Bullets and enemy bullets are cleared between levels.
   - **Extra Lives:** Extra lives are awarded each time a defined score threshold is reached.
-  - **Overlays:** Start Menu, Pause screen, Game Over screen, and Victory screen (with a firework effect).
+  - **Overlays:** Start Menu, Pause screen, Game Over screen, and Victory screen (with fireworks on victory).
 
 - **Scoreboard:**
   - Top 10 high scores stored in `localStorage` — persists across sessions.
@@ -64,6 +64,15 @@ Game accessible at `http://100.108.31.115:5023` (Tailscale only).
 ---
 
 ## Changelog
+
+### 2026-04-05
+- **Fix:** Fireworks now actually trigger on victory (function was defined but never called)
+- **Fix:** Bullet cooldown (200ms) added — rapid-fire spam no longer possible
+- **Fix:** Space bar now guarded to only shoot during `playing` state
+- **Fix:** `bullets[]` cleared on new game start and between levels
+- **Fix:** `enemyBullets[]` cleared between levels — stale bullets no longer carry over from previous level
+- **Fix:** Enemy bullet collision loop breaks immediately after game over is set
+- **Cleanup:** Removed remaining debug `console.log`
 
 ### 2026-04-04 (2)
 - **Feature:** Scoreboard system — top 10 scores saved to `localStorage` with name entry after game over/victory; scores displayed on start screen and post-game modals
